@@ -5,6 +5,8 @@ import Form from '../../ui/Form';
 import Button from '../../ui/Button';
 import FileInput from '../../ui/FileInput';
 import Textarea from '../../ui/Textarea';
+import { FieldValues, useForm } from 'react-hook-form';
+import { NewCabinType } from '../../types';
 
 const FormRow = styled.div`
   display: grid;
@@ -43,31 +45,46 @@ const Error = styled.span`
 `;
 
 function CreateCabinForm() {
+  const { register, handleSubmit } = useForm();
+
+  function onSubmitHandler(data: FieldValues) {
+    console.log(data);
+  }
   return (
-    <Form>
+    <Form onSubmit={handleSubmit(onSubmitHandler)}>
       <FormRow>
         <Label htmlFor="name">Cabin name</Label>
-        <Input type="text" id="name" />
+        <Input {...register('name')} type="text" id="name" />
       </FormRow>
 
       <FormRow>
         <Label htmlFor="maxCapacity">Maximum capacity</Label>
-        <Input type="number" id="maxCapacity" />
+        <Input {...register('maxCapacity')} type="number" id="maxCapacity" />
       </FormRow>
 
       <FormRow>
         <Label htmlFor="regularPrice">Regular price</Label>
-        <Input type="number" id="regularPrice" />
+        <Input {...register('regularPrice')} type="number" id="regularPrice" />
       </FormRow>
 
       <FormRow>
         <Label htmlFor="discount">Discount</Label>
-        <Input type="number" id="discount" defaultValue={0} />
+        <Input
+          {...register('discount')}
+          type="number"
+          id="discount"
+          defaultValue={0}
+        />
       </FormRow>
 
       <FormRow>
         <Label htmlFor="description">Description for website</Label>
-        <Textarea type="number" id="description" defaultValue="" />
+        <Textarea
+          {...register('description')}
+          type="number"
+          id="description"
+          defaultValue=""
+        />
       </FormRow>
 
       <FormRow>
