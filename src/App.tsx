@@ -9,6 +9,7 @@ import Settings from './pages/Settings';
 import Account from './pages/Account';
 import Login from './pages/Login';
 import PageNotFound from './pages/PageNotFound';
+import AppLayout from './ui/AppLayout';
 
 function App() {
   return (
@@ -16,13 +17,15 @@ function App() {
       <GlobalStyles />
       <BrowserRouter>
         <Routes>
-          <Route index element={<Navigate to={APP_ROUTES.DASHBOARD} />} />
-          <Route path={APP_ROUTES.DASHBOARD} element={<Dashboard />} />
-          <Route path={APP_ROUTES.BOOKINGS} element={<Bookings />} />
-          <Route path={APP_ROUTES.CABINS} element={<Cabins />} />
-          <Route path={APP_ROUTES.USERS} element={<Users />} />
-          <Route path={APP_ROUTES.SETTINGS} element={<Settings />} />
-          <Route path={APP_ROUTES.ACCOUNT} element={<Account />} />
+          <Route element={<AppLayout />}>
+            <Route index element={<Navigate to={APP_ROUTES.DASHBOARD} />} />
+            <Route path={APP_ROUTES.DASHBOARD} element={<Dashboard />} />
+            <Route path={APP_ROUTES.BOOKINGS} element={<Bookings />} />
+            <Route path={APP_ROUTES.CABINS} element={<Cabins />} />
+            <Route path={APP_ROUTES.USERS} element={<Users />} />
+            <Route path={APP_ROUTES.SETTINGS} element={<Settings />} />
+            <Route path={APP_ROUTES.ACCOUNT} element={<Account />} />
+          </Route>
           <Route path={APP_ROUTES.LOGIN} element={<Login />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
