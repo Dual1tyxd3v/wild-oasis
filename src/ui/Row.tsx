@@ -1,7 +1,7 @@
 import { css, styled } from 'styled-components';
 
 type Props = {
-  type: 'horizontal' | 'vertical';
+  type?: 'horizontal' | 'vertical';
 };
 
 const Row = styled.div<Props>`
@@ -22,7 +22,7 @@ const Row = styled.div<Props>`
     `}
 `;
 Row.defaultProps = {
-  type: 'vertical'
-}
+  type: 'vertical',
+};
 
 export default Row;

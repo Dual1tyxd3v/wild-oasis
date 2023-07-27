@@ -49,8 +49,8 @@ const variations = {
 };
 
 type Props = {
-  variation: keyof (typeof variations);
-  size: keyof (typeof sizes);
+  variation?: keyof (typeof variations);
+  size?: keyof (typeof sizes);
 }
 
 const Button = styled.button<Props>`
@@ -58,8 +58,8 @@ const Button = styled.button<Props>`
   border-radius: var(--border-radius-sm);
   box-shadow: var(--shadow-sm);
 
-  ${props => variations[props.variation]}
-  ${props => sizes[props.size]}
+  ${props => props.variation && variations[props.variation]}
+  ${props => props.size && sizes[props.size]}
 
   &:hover {
     background-color: var(--color-brand-700);
