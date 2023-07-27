@@ -13,7 +13,7 @@ export async function deleteCabin(id: number) {
   const { data, error } = await supabase.from('cabins').delete().eq('id', id);
 
   if (error) {
-    throw new Error('Cound not delte Cabin😭');
+    throw new Error('Cound not delete Cabin😭');
   }
   return data;
 }
