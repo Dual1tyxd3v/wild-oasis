@@ -6,7 +6,7 @@ import { getCabins } from '../services/apiCabins';
 function Cabins() {
 
   useEffect(() => {
-    getCabins().then(() => console.log('ready'));
+    getCabins().then((data) => console.log(data));
   }, []);
   return (
     <Row type="horizontal">
