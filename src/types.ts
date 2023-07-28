@@ -10,3 +10,12 @@ export type CabinType = {
 };
 
 export type NewCabin = Omit<CabinType, 'id' | 'created_at'>;
+
+export type SettingsType = {
+  breakfast_price: number;
+  created_at: string;
+  id: number;
+  max_booking_length: number;
+  max_guests: number;
+  min_booking_length: number;
+};

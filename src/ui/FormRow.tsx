@@ -38,7 +38,7 @@ const Error = styled.span`
 `;
 type FormRowProps = {
   children: ReactElement;
-  errorMessage: string | null;
+  errorMessage?: string | null;
   labelName: string;
 };
 
