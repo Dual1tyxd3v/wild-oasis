@@ -19,3 +19,7 @@ export type SettingsType = {
   max_guests: number;
   min_booking_length: number;
 };
+
+export type NewSetting = {
+  [key: string]: string | number;
+};
