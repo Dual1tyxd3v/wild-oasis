@@ -1,3 +1,4 @@
+import { NewCabin } from '../types';
 import supabase from './supabase';
 
 export async function getCabins() {
@@ -14,6 +15,17 @@ export async function deleteCabin(id: number) {
 
   if (error) {
     throw new Error('Cound not delete Cabin😭');
+  }
+  return data;
+}
+
+export async function createCabin(newCabin: NewCabin) {
+  const { data, error } = await supabase
+    .from('cabins')
+    .insert([newCabin])
+    .select();
+  if (error) {
+    throw new Error('Cound not create Cabin😭');
   }
   return data;
 }

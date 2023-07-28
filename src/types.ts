@@ -8,3 +8,5 @@ export type CabinType = {
   description: string;
   image: string;
 };
+
+export type NewCabin = Omit<CabinType, 'id' | 'created_at'>;
