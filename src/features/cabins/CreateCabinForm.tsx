@@ -61,8 +61,7 @@ function CreateCabinForm() {
   });
 
   function onSubmitHandler(data: FieldValues) {
-    const newCabin = { ...data, image: 'qwe' };
-    mutate(newCabin as NewCabin);
+    mutate({ ...data, image: data.image[0] } as NewCabin);
   }
   function onErrorSubmit() {}
 
@@ -144,10 +143,19 @@ function CreateCabinForm() {
         />
       </FormRow>
 
-      <StyledFormRow>
-        <Label htmlFor="image">Cabin photo</Label>
-        <FileInput id="image" accept="image/*" />
-      </StyledFormRow>
+      <FormRow
+        labelName="Cabin photo"
+        errorMessage={(errors?.image?.message as string) || null}
+      >
+        <FileInput
+          id="image"
+          type="file"
+          accept="image/*"
+          {...register('image', {
+            required: 'This field is required',
+          })}
+        />
+      </FormRow>
 
       <StyledFormRow>
         {/* type is an HTML attribute! */}

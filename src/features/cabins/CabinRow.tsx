@@ -65,7 +65,7 @@ export default function CabinRow({ cabin }: CabinRowProps) {
   const { id, image, name, max_capacity, regular_price, discount } = cabin;
   return (
     <TableRow role="row">
-      <Img src={image} />
+      <Img src={image as string} />
       <Cabin>{name}</Cabin>
       <div>Fits up to {max_capacity} guests</div>
       <Price>{formatCurrency(regular_price)}</Price>
