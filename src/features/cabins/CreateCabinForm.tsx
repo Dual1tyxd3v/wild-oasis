@@ -7,9 +7,9 @@ import FileInput from '../../ui/FileInput';
 import Textarea from '../../ui/Textarea';
 import { FieldValues, useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createCabin } from '../../services/apiCabins';
+import { createCabin, updateCabin } from '../../services/apiCabins';
 import { toast } from 'react-hot-toast';
-import { NewCabin } from '../../types';
+import { CabinType, NewCabin } from '../../types';
 import FormRow from '../../ui/FormRow';
 
 const StyledFormRow = styled.div`
@@ -39,16 +39,20 @@ const StyledFormRow = styled.div`
   }
 `;
 
-const Label = styled.label`
-  font-weight: 500;
-`;
+type CreateCabinFormProps = {
+  cabin?: CabinType;
+};
 
-function CreateCabinForm() {
-  const { register, handleSubmit, reset, getValues, formState } = useForm();
+function CreateCabinForm({ cabin }: CreateCabinFormProps) {
+  const { register, handleSubmit, reset, getValues, formState } = useForm(
+    cabin && {
+      defaultValues: cabin,
+    }
+  );
   const { errors } = formState;
 
   const queryClient = useQueryClient();
-  const { mutate, isLoading } = useMutation({
+  const { mutate: createNewCabin, isLoading: isCreating } = useMutation({
     mutationFn: createCabin,
     onError: (err: Error) => toast.error(err.message),
     onSuccess: () => {
@@ -60,10 +64,28 @@ function CreateCabinForm() {
     },
   });
 
+  const { mutate: editCabin, isLoading: isEditing } = useMutation({
+    mutationFn: updateCabin,
+    onError: (err: Error) => toast.error(err.message),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['cabins'],
+      });
+      toast.success('Cabin was edited');
+      reset();
+    },
+  });
+
   function onSubmitHandler(data: FieldValues) {
-    mutate({ ...data, image: data.image[0] } as NewCabin);
+    const image = typeof data.image === 'string' ? data.image : data.image[0];
+    if (cabin) {
+      editCabin({ ...data, image: image } as CabinType);
+    } else {
+      createNewCabin({ ...data, image: image } as NewCabin);
+    }
   }
   function onErrorSubmit() {}
+  const isWorking = isCreating || isEditing;
 
   return (
     <Form onSubmit={handleSubmit(onSubmitHandler, onErrorSubmit)}>
@@ -152,7 +174,7 @@ function CreateCabinForm() {
           type="file"
           accept="image/*"
           {...register('image', {
-            required: 'This field is required',
+            required: cabin ? false : 'This field is required',
           })}
         />
       </FormRow>
@@ -162,7 +184,9 @@ function CreateCabinForm() {
         <Button variation="secondary" type="reset">
           Cancel
         </Button>
-        <Button disabled={isLoading}>Add cabin</Button>
+        <Button disabled={isWorking}>
+          {cabin ? 'Edit cabin' : 'Add new cabin'}
+        </Button>
       </StyledFormRow>
     </Form>
   );
