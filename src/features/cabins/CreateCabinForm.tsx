@@ -55,9 +55,12 @@ function CreateCabinForm({ cabin }: CreateCabinFormProps) {
   function onSubmitHandler(data: FieldValues) {
     const image = typeof data.image === 'string' ? data.image : data.image[0];
     if (cabin) {
-      editCabin({ ...data, image: image } as CabinType, {
-        onSuccess: () => reset(),
-      });
+      editCabin(
+        { newCabin: { ...data, image: image } as CabinType, id: data.id },
+        {
+          onSuccess: () => reset(),
+        }
+      );
     } else {
       createNewCabin({ ...data, image: image } as NewCabin, {
         onSuccess: () => reset(),
@@ -65,7 +68,7 @@ function CreateCabinForm({ cabin }: CreateCabinFormProps) {
     }
   }
   function onErrorSubmit() {}
-  
+
   const isWorking = isCreating || isEditing;
 
   return (

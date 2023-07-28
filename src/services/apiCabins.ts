@@ -19,35 +19,23 @@ export async function deleteCabin(id: number) {
   return data;
 }
 
-export async function updateCabin(newCabin: CabinType) {
-  const { id, created_at, ...editedValues } = newCabin;
+export async function createAndEditCabin(newCabin: NewCabin | CabinType, id?: number) {
   const needUploadImage = typeof newCabin.image !== 'string';
 
   const imagePath = needUploadImage
     ? await uploadImage(newCabin.image as File)
     : (newCabin.image as string);
 
-  const { data, error } = await supabase
-    .from('cabins')
-    .update({ ...editedValues, image: imagePath })
-    .eq('id', id)
-    .select();
+  let query;
+  if (id) {
+    const { id, created_at, ...editedValues } = newCabin as CabinType;
 
-  if (error) {
-    console.log(error.message);
-    throw new Error('Cound not create Cabin😭');
+    query = supabase.from('cabins').update({ ...editedValues, image: imagePath }).eq('id', id);
+  } else {
+    query = supabase.from('cabins').insert([{ ...newCabin, image: imagePath }]);
   }
-  return data;
-}
 
-export async function createCabin(newCabin: NewCabin) {
-  const imagePath = await uploadImage(newCabin.image as File);
-
-  const { data, error } = await supabase
-    .from('cabins')
-    .insert([{ ...newCabin, image: imagePath }])
-    .select()
-    .single();
+  const { data, error } = await query.select().single();
 
   if (error) {
     throw new Error('Cound not create Cabin😭');
