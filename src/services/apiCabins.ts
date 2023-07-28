@@ -59,7 +59,7 @@ async function uploadImage(file: File) {
   const fileName = `${new Date().getTime()}_${file.name.replace(/\//, '')}`;
 
   const imagePath = `${supabaseCabinImagesUrl}${fileName}`;
-  // Upload image
+
   const { error: imageError } = await supabase.storage
     .from('cabin-images')
     .upload(fileName, file);
