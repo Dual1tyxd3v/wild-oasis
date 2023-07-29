@@ -23,3 +23,5 @@ export type SettingsType = {
 export type NewSetting = {
   [key: string]: string | number;
 };
+
+export type FormTypeProp =  'modal' | 'regular';

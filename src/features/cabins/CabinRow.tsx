@@ -100,7 +100,7 @@ export default function CabinRow({ cabin }: CabinRowProps) {
           </button>
         </div>
       </TableRow>
-      {showEditForm && <CreateCabinForm cabin={cabin} />}
+      {showEditForm && <CreateCabinForm formType='regular' cabin={cabin} />}
     </>
   );
 }

@@ -6,7 +6,7 @@ import FileInput from '../../ui/FileInput';
 import Textarea from '../../ui/Textarea';
 import FormRow from '../../ui/FormRow';
 import { FieldValues, useForm } from 'react-hook-form';
-import { CabinType, NewCabin } from '../../types';
+import { CabinType, FormTypeProp, NewCabin } from '../../types';
 import useCreateCabin from './useCreateCabin';
 import useUpdateCabin from './useUpdateCabin';
 
@@ -39,9 +39,11 @@ const StyledFormRow = styled.div`
 
 type CreateCabinFormProps = {
   cabin?: CabinType;
+  formType: FormTypeProp;
+  onClose?: () => void;
 };
 
-function CreateCabinForm({ cabin }: CreateCabinFormProps) {
+function CreateCabinForm({ cabin, formType, onClose }: CreateCabinFormProps) {
   const { register, handleSubmit, reset, getValues, formState } = useForm(
     cabin && {
       defaultValues: cabin,
@@ -63,7 +65,10 @@ function CreateCabinForm({ cabin }: CreateCabinFormProps) {
       );
     } else {
       createNewCabin({ ...data, image: image } as NewCabin, {
-        onSuccess: () => reset(),
+        onSuccess: () => {
+          reset();
+          onClose?.();
+        },
       });
     }
   }
@@ -72,7 +77,10 @@ function CreateCabinForm({ cabin }: CreateCabinFormProps) {
   const isWorking = isCreating || isEditing;
 
   return (
-    <Form onSubmit={handleSubmit(onSubmitHandler, onErrorSubmit)}>
+    <Form
+      type={formType}
+      onSubmit={handleSubmit(onSubmitHandler, onErrorSubmit)}
+    >
       <FormRow
         labelName="Cabin name"
         errorMessage={(errors?.name?.message as string) || null}
@@ -155,7 +163,6 @@ function CreateCabinForm({ cabin }: CreateCabinFormProps) {
       >
         <FileInput
           id="image"
-          type="file"
           accept="image/*"
           {...register('image', {
             required: cabin ? false : 'This field is required',
@@ -165,7 +172,11 @@ function CreateCabinForm({ cabin }: CreateCabinFormProps) {
 
       <StyledFormRow>
         {/* type is an HTML attribute! */}
-        <Button variation="secondary" type="reset">
+        <Button
+          variation="secondary"
+          type="reset"
+          onClick={() => onClose?.()}
+        >
           Cancel
         </Button>
         <Button disabled={isWorking}>
