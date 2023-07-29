@@ -6,7 +6,7 @@ import FileInput from '../../ui/FileInput';
 import Textarea from '../../ui/Textarea';
 import FormRow from '../../ui/FormRow';
 import { FieldValues, useForm } from 'react-hook-form';
-import { CabinType, FormTypeProp, NewCabin } from '../../types';
+import { CabinType, NewCabin } from '../../types';
 import useCreateCabin from './useCreateCabin';
 import useUpdateCabin from './useUpdateCabin';
 
@@ -39,11 +39,10 @@ const StyledFormRow = styled.div`
 
 type CreateCabinFormProps = {
   cabin?: CabinType;
-  formType: FormTypeProp;
   onClose?: () => void;
 };
 
-function CreateCabinForm({ cabin, formType, onClose }: CreateCabinFormProps) {
+function CreateCabinForm({ cabin, onClose }: CreateCabinFormProps) {
   const { register, handleSubmit, reset, getValues, formState } = useForm(
     cabin && {
       defaultValues: cabin,
@@ -53,6 +52,8 @@ function CreateCabinForm({ cabin, formType, onClose }: CreateCabinFormProps) {
 
   const { createNewCabin, isCreating } = useCreateCabin();
   const { isEditing, editCabin } = useUpdateCabin();
+
+  const formType = onClose ? 'modal' : 'regular';
 
   function onSubmitHandler(data: FieldValues) {
     const image = typeof data.image === 'string' ? data.image : data.image[0];
