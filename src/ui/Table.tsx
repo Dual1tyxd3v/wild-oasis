@@ -1,6 +1,6 @@
 import { ReactNode, createContext } from 'react';
 import styled from 'styled-components';
-import { WithChildren } from '../types';
+import { CabinType, WithChildren } from '../types';
 import { useTableContext } from '../hooks/useTableContext';
 
 const StyledTable = styled.div`
@@ -95,7 +95,7 @@ Table.Header = function Header({ children }: WithChildren) {
   );
 };
 
-Table.Row = function Row ({ children }: WithChildren) {
+Table.Row = function Row({ children }: WithChildren) {
   const { columns } = useTableContext();
 
   return (
@@ -105,7 +105,16 @@ Table.Row = function Row ({ children }: WithChildren) {
   );
 };
 
-Table.Body = function ({ children }: WithChildren) {};
+type BodyProps = {
+  data: CabinType[];
+  render: (c: CabinType) => ReactNode;
+};
+
+Table.Body = function Body({ data, render }: BodyProps) {
+  if (!data.length) return <Empty>No data to show at the moment</Empty>;
+
+  return <StyledBody>{data.map(render)}</StyledBody>;
+};
 
 Table.Footer = Footer;
 

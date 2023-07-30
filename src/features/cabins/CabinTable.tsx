@@ -2,6 +2,7 @@ import Spinner from '../../ui/Spinner';
 import CabinRow from './CabinRow';
 import useCabins from './useCabins';
 import Table from '../../ui/Table';
+import { CabinType } from '../../types';
 
 export default function CabinTable() {
   const { isLoading, data } = useCabins();
@@ -18,9 +19,12 @@ export default function CabinTable() {
         <div>Discount</div>
         <div></div>
       </Table.Header>
-      {data?.map((cabin) => (
-        <CabinRow cabin={cabin} key={`cabins_${cabin.id}`} />
-      ))}
+      <Table.Body
+        data={data as CabinType[]}
+        render={(cabin) => (
+          <CabinRow cabin={cabin} key={`cabins_${cabin.id}`} />
+        )}
+      />
     </Table>
   );
 }
