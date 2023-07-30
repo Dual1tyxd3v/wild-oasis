@@ -1,6 +1,12 @@
 import styled from 'styled-components';
+import { PositionType, WithChildren } from '../types';
+import { ReactNode, createContext, useState, MouseEvent } from 'react';
+import { HiEllipsisVertical } from 'react-icons/hi2';
+import { useMenusContext } from '../hooks/useMenusContext';
+import { createPortal } from 'react-dom';
+import { useOutsideClick } from '../hooks/useOutsideClick';
 
-const StyledMenu = styled.div`
+const Menu = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -25,7 +31,14 @@ const StyledToggle = styled.button`
   }
 `;
 
-const StyledList = styled.ul`
+type StyledListProps = {
+  position: {
+    x: number;
+    y: number;
+  };
+};
+
+const StyledList = styled.ul<StyledListProps>`
   position: fixed;
 
   background-color: var(--color-grey-0);
@@ -60,3 +73,96 @@ const StyledButton = styled.button`
     transition: all 0.3s;
   }
 `;
+
+type MenusContextType = {
+  openId: null | number;
+  close: () => void;
+  open: (id: number) => void;
+  position: PositionType | null;
+  setPosition: (p: PositionType | null) => void;
+};
+
+export const MenusContext = createContext<null | MenusContextType>(null);
+
+function Menus({ children }: WithChildren) {
+  const [openId, setOpenId] = useState<null | number>(null);
+  const [position, setPosition] = useState<null | PositionType>(null);
+
+  const open = setOpenId;
+  const close = () => setOpenId(null);
+  return (
+    <MenusContext.Provider
+      value={{ openId, open, close, position, setPosition }}
+    >
+      {children}
+    </MenusContext.Provider>
+  );
+}
+
+Menus.Toggle = function Toggle({ id }: { id: number }) {
+  const { openId, open, close, setPosition } = useMenusContext();
+
+  function handleClick(e: MouseEvent) {
+    const rect = (e.target as HTMLButtonElement)
+      .closest('button')
+      ?.getBoundingClientRect();
+    if (!rect) return;
+
+    setPosition({
+      x: window.innerWidth - rect?.width - rect?.x,
+      y: rect?.y + rect?.height + 8,
+    });
+
+    !openId || openId !== id ? open(id) : close();
+  }
+  return (
+    <StyledToggle className='js-toggle' onClick={handleClick}>
+      <HiEllipsisVertical />
+    </StyledToggle>
+  );
+};
+
+type ListProps = {
+  children: ReactNode;
+  id: number;
+};
+
+Menus.List = function List({ children, id }: ListProps) {
+  const { openId, position, close } = useMenusContext();
+  const ref = useOutsideClick(close);
+
+  if (openId !== id) return null;
+
+  return createPortal(
+    <StyledList ref={ref} position={position as PositionType}>
+      {children}
+    </StyledList>,
+    document.body
+  );
+};
+
+type ButtonProps = {
+  children: ReactNode;
+  icon: ReactNode;
+  onClick?: () => void;
+};
+
+Menus.Button = function Button({ children, icon, onClick }: ButtonProps) {
+  const { close } = useMenusContext();
+
+  function handleClick() {
+    onClick?.();
+    close();
+  }
+  return (
+    <li>
+      <StyledButton onClick={handleClick}>
+        {icon} <span>{children}</span>
+      </StyledButton>
+    </li>
+  );
+};
+
+Menus.Menu = Menu;
+
+export default Menus;

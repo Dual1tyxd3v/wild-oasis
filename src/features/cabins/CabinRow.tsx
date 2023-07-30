@@ -9,6 +9,7 @@ import useCreateCabin from './useCreateCabin';
 import Modal from '../../ui/Modal';
 import ConfirmDelete from '../../ui/ConfirmDelete';
 import Table from '../../ui/Table';
+import Menus from '../../ui/Menus';
 
 const Img = styled.img`
   display: block;
@@ -43,7 +44,7 @@ type CabinRowProps = {
 
 export default function CabinRow({ cabin }: CabinRowProps) {
   const { isDeleting, deleteCabin } = useDeleteCabin();
-  const { isCreating, createNewCabin } = useCreateCabin();
+  const { createNewCabin } = useCreateCabin();
 
   const {
     id,
@@ -83,24 +84,26 @@ export default function CabinRow({ cabin }: CabinRowProps) {
       )}
       <div>
         <Modal>
-          <button disabled={isCreating} onClick={onCopyHandle}>
-            <HiSquare2Stack />
-          </button>
+          <Menus.Menu>
+            <Menus.Toggle id={id} />
 
-          <Modal.Open opens="update">
-            <button>
-              <HiPencil />
-            </button>
-          </Modal.Open>
+            <Menus.List id={id}>
+              <Menus.Button icon={<HiSquare2Stack />} onClick={onCopyHandle}>
+                Duplicate
+              </Menus.Button>
+              <Modal.Open opens="update">
+                <Menus.Button icon={<HiPencil />}>Edit</Menus.Button>
+              </Modal.Open>
+              <Modal.Open opens="delete">
+                <Menus.Button icon={<HiTrash />}>Delete</Menus.Button>
+              </Modal.Open>
+            </Menus.List>
+          </Menus.Menu>
+
           <Modal.Window name="update">
             <CreateCabinForm cabin={cabin} />
           </Modal.Window>
 
-          <Modal.Open opens="delete">
-            <button disabled={isDeleting}>
-              <HiTrash />
-            </button>
-          </Modal.Open>
           <Modal.Window name="delete">
             <ConfirmDelete
               resourceName={name}

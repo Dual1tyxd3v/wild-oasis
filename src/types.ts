@@ -31,3 +31,8 @@ export type FormTypeProp =  'modal' | 'regular';
 export type WithChildren = {
   children: ReactNode;
 }
+
+export type PositionType = {
+  x: number;
+  y: number;
+}

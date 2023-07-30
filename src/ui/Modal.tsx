@@ -1,14 +1,9 @@
-import {
-  ReactNode,
-  cloneElement,
-  createContext,
-  useState,
-  MouseEvent,
-} from 'react';
+import { ReactNode, cloneElement, createContext, useState } from 'react';
 import { HiXMark } from 'react-icons/hi2';
 import styled from 'styled-components';
 import { createPortal } from 'react-dom';
 import { useModalContext } from '../hooks/useModalContext';
+import { useOutsideClick } from '../hooks/useOutsideClick';
 
 const StyledModal = styled.div`
   position: fixed;
@@ -107,17 +102,13 @@ type WindowProps = {
 
 function Window({ children, name }: WindowProps) {
   const { openName, close } = useModalContext();
+  const ref = useOutsideClick(close);
 
   if (name !== openName) return null;
 
-  function onClickHandler(e: MouseEvent) {
-    if (e.target !== e.currentTarget) return;
-
-    close();
-  }
   return createPortal(
-    <Overlay onClick={onClickHandler}>
-      <StyledModal>
+    <Overlay>
+      <StyledModal ref={ref}>
         <Button onClick={close}>
           <HiXMark />
         </Button>
