@@ -61,7 +61,10 @@ function CreateCabinForm({ cabin, onClose }: CreateCabinFormProps) {
       editCabin(
         { newCabin: { ...data, image: image } as CabinType, id: data.id },
         {
-          onSuccess: () => reset(),
+          onSuccess: () => {
+            reset();
+            onClose?.();
+          },
         }
       );
     } else {
