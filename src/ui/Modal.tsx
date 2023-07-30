@@ -7,7 +7,7 @@ import {
 import { HiXMark } from 'react-icons/hi2';
 import styled from 'styled-components';
 import { createPortal } from 'react-dom';
-import { useModalContext } from '../hooks/useAppContext';
+import { useModalContext } from '../hooks/useModalContext';
 
 const StyledModal = styled.div`
   position: fixed;
