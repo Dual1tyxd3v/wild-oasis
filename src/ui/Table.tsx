@@ -1,4 +1,7 @@
+import { ReactNode, createContext } from 'react';
 import styled from 'styled-components';
+import { WithChildren } from '../types';
+import { useTableContext } from '../hooks/useTableContext';
 
 const StyledTable = styled.div`
   border: 1px solid var(--color-grey-200);
@@ -11,7 +14,7 @@ const StyledTable = styled.div`
 
 type CommonRowProps = {
   columns: string;
-}
+};
 
 const CommonRow = styled.div<CommonRowProps>`
   display: grid;
@@ -62,3 +65,48 @@ const Empty = styled.p`
   text-align: center;
   margin: 2.4rem;
 `;
+
+type TableProps = {
+  children: ReactNode;
+  columns: string;
+};
+
+type TableContextType = {
+  columns: string;
+};
+
+export const TableContext = createContext<TableContextType | null>(null);
+
+function Table({ columns, children }: TableProps) {
+  return (
+    <TableContext.Provider value={{ columns }}>
+      <StyledTable role="table">{children}</StyledTable>
+    </TableContext.Provider>
+  );
+}
+
+Table.Header = function Header({ children }: WithChildren) {
+  const { columns } = useTableContext();
+
+  return (
+    <StyledHeader role="row" columns={columns}>
+      {children}
+    </StyledHeader>
+  );
+};
+
+Table.Row = function Row ({ children }: WithChildren) {
+  const { columns } = useTableContext();
+
+  return (
+    <StyledRow role="row" columns={columns}>
+      {children}
+    </StyledRow>
+  );
+};
+
+Table.Body = function ({ children }: WithChildren) {};
+
+Table.Footer = Footer;
+
+export default Table;

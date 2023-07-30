@@ -1,3 +1,5 @@
+import { ReactNode } from 'react';
+
 export type CabinType = {
   id: number;
   created_at: string;
@@ -25,3 +27,7 @@ export type NewSetting = {
 };
 
 export type FormTypeProp =  'modal' | 'regular';
+
+export type WithChildren = {
+  children: ReactNode;
+}
