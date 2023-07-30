@@ -3,6 +3,7 @@ import {
   cloneElement,
   createContext,
   useState,
+  MouseEvent,
 } from 'react';
 import { HiXMark } from 'react-icons/hi2';
 import styled from 'styled-components';
@@ -108,8 +109,14 @@ function Window({ children, name }: WindowProps) {
   const { openName, close } = useModalContext();
 
   if (name !== openName) return null;
+
+  function onClickHandler(e: MouseEvent) {
+    if (e.target !== e.currentTarget) return;
+
+    close();
+  }
   return createPortal(
-    <Overlay>
+    <Overlay onClick={onClickHandler}>
       <StyledModal>
         <Button onClick={close}>
           <HiXMark />
