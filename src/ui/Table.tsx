@@ -1,6 +1,6 @@
 import { ReactNode, createContext } from 'react';
 import styled from 'styled-components';
-import { CabinType, WithChildren } from '../types';
+import { BookingType, CabinType, WithChildren } from '../types';
 import { useTableContext } from '../hooks/useTableContext';
 
 const StyledTable = styled.div`
@@ -106,8 +106,8 @@ Table.Row = function Row({ children }: WithChildren) {
 };
 
 type BodyProps = {
-  data: CabinType[];
-  render: (c: CabinType) => ReactNode;
+  data: CabinType[] | BookingType[];
+  render: (c: CabinType | BookingType) => ReactNode;
 };
 
 Table.Body = function Body({ data, render }: BodyProps) {

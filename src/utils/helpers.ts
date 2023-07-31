@@ -48,35 +48,4 @@ export const sortCabinsArray = (arr: CabinType[], sort: string) => {
     }
     return a.id - b.id;
   });
-
-  switch (sortField) {
-    case 'name':
-      arr.sort((a, b) =>
-        direction === 'asc'
-          ? a.name.localeCompare(b.name)
-          : b.name.localeCompare(a.name)
-      );
-      break;
-    case 'regular_price':
-      arr.sort((a, b) =>
-        direction === 'asc'
-          ? a['regular_price'] - b['regular_price']
-          : b['regular_price'] - a['regular_price']
-      );
-      break;
-    case 'max_capacity':
-      arr.sort((a, b) =>
-        direction === 'asc'
-          ? a['max_capacity'] - b['max_capacity']
-          : b['max_capacity'] - a['max_capacity']
-      );
-      break;
-    default:
-      arr.sort((a, b) =>
-        direction === 'asc'
-          ? a['created_at'].localeCompare(b['created_at'])
-          : b['created_at'].localeCompare(a['created_at'])
-      );
-      break;
-  }
 };
