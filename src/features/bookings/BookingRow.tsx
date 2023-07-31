@@ -58,7 +58,6 @@ function BookingRow({
     'checked-in': 'green',
     'checked-out': 'silver',
   };
-  console.log(status)
 
   return (
     <Table.Row>
