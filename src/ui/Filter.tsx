@@ -12,7 +12,7 @@ const StyledFilter = styled.div`
 `;
 
 type FilterButtonProps = {
-  active?: boolean;
+  active?: string;
 };
 
 const FilterButton = styled.button<FilterButtonProps>`
@@ -59,6 +59,9 @@ function Filter({ filterField, options }: FilterProps) {
         <FilterButton
           key={option}
           active={
+            filterValue === option.toLowerCase().replace(/ /g, '-') ? 'true' : ''
+          }
+          disabled={
             filterValue === option.toLowerCase().replace(/ /g, '-')
           }
           onClick={() => handleClick(option.toLowerCase().replace(/ /g, '-'))}
