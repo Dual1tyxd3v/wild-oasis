@@ -2,11 +2,21 @@ import { BookingType } from '../types';
 import { getToday } from '../utils/helpers';
 import supabase from './supabase';
 
-export async function getBookings() {
-  const { data, error } = await supabase
+type GetBookingsProps = {
+  filter: string | null;
+  sortBy: string | null;
+};
+
+export async function getBookings({ filter, sortBy }: GetBookingsProps) {
+  let query = supabase
     .from('bookings')
     .select('*, cabins(name), guests(fullName, email)');
 
+  if (filter && sortBy) {
+    query = query.eq(filter, sortBy);
+  }
+
+  const { data, error } = await query;
   if (error) throw new Error('Bookings could not be loaded');
 
   return data;
