@@ -1,4 +1,7 @@
+import { HiChevronLeft, HiChevronRight } from 'react-icons/hi2';
+import { useSearchParams } from 'react-router-dom';
 import styled from 'styled-components';
+import { PAGINATION_COUNT } from '../const';
 
 const StyledPagination = styled.div`
   width: 100%;
@@ -21,7 +24,11 @@ const Buttons = styled.div`
   gap: 0.6rem;
 `;
 
-const PaginationButton = styled.button`
+type PaginationButtonProps = {
+  active?: string;
+};
+
+const PaginationButton = styled.button<PaginationButtonProps>`
   background-color: ${(props) =>
     props.active ? ' var(--color-brand-600)' : 'var(--color-grey-50)'};
   color: ${(props) => (props.active ? ' var(--color-brand-50)' : 'inherit')};
@@ -55,3 +62,55 @@ const PaginationButton = styled.button`
     color: var(--color-brand-50);
   }
 `;
+
+type PaginationProps = {
+  count: number;
+};
+
+function Pagination({ count }: PaginationProps) {
+  const [params, setParams] = useSearchParams();
+
+  if (count < PAGINATION_COUNT) return null;
+
+  const currentPage = !params.get('page') ? 1 : Number(params.get('page'));
+  const pageCount = Math.ceil(count / PAGINATION_COUNT);
+
+  function nextPage() {
+    const next = currentPage === pageCount ? currentPage : currentPage + 1;
+    params.set('page', next.toString());
+    setParams(params);
+  }
+
+  function prevPage() {
+    const prev = currentPage === 1 ? currentPage : currentPage - 1;
+    params.set('page', prev.toString());
+    setParams(params);
+  }
+
+  return (
+    <StyledPagination>
+      <P>
+        Showing <span>{(currentPage - 1) * 10 + 1}</span> to{' '}
+        <span>
+          {currentPage === pageCount ? count : currentPage * PAGINATION_COUNT}
+        </span>{' '}
+        of <span>{count}</span> results
+      </P>
+      <Buttons>
+        <PaginationButton disabled={currentPage === 1} onClick={prevPage}>
+          <HiChevronLeft />
+          <span>Previous</span>
+        </PaginationButton>
+        <PaginationButton
+          disabled={currentPage === pageCount}
+          onClick={nextPage}
+        >
+          <span>Next</span>
+          <HiChevronRight />
+        </PaginationButton>
+      </Buttons>
+    </StyledPagination>
+  );
+}
+
+export default Pagination;

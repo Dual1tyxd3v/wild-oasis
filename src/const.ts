@@ -21,3 +21,5 @@ export const SORT_CABIN_OPTIONS = [
   { value: 'max_capacity-asc', label: 'capacity (low first)' },
   { value: 'max_capacity-desc', label: 'capacity (high first)' },
 ];
+
+export const PAGINATION_COUNT = 10;
