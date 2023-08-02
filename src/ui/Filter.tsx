@@ -51,6 +51,7 @@ function Filter({ filterField, options }: FilterProps) {
 
   function handleClick(value: string) {
     params.set(filterField, value);
+    params.set('page', '1');
     setParams(params);
   }
   return (

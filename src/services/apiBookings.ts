@@ -1,3 +1,4 @@
+import { PAGINATION_COUNT } from '../const';
 import { BookingType } from '../types';
 import { getToday } from '../utils/helpers';
 import supabase from './supabase';
@@ -5,21 +6,29 @@ import supabase from './supabase';
 type GetBookingsProps = {
   filter: string | null;
   sortBy: string | null;
+  page: number | null;
 };
 
-export async function getBookings({ filter, sortBy }: GetBookingsProps) {
+export async function getBookings({ filter, sortBy, page }: GetBookingsProps) {
   let query = supabase
     .from('bookings')
-    .select('*, cabins(name), guests(fullName, email)');
+    .select('*, cabins(name), guests(fullName, email)', { count: 'exact' });
 
   if (filter && sortBy) {
     query = query.eq(filter, sortBy);
   }
 
-  const { data, error } = await query;
+  if (page) {
+    const from = (page - 1) * PAGINATION_COUNT;
+    const to = from + PAGINATION_COUNT - 1;
+    
+    query = query.range(from, to);
+  }
+
+  const { data, error, count } = await query;
   if (error) throw new Error('Bookings could not be loaded');
 
-  return data;
+  return { data, count };
 }
 
 export async function getBooking(id: number) {

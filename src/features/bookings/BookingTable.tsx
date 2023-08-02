@@ -8,7 +8,7 @@ import { BookingType } from '../../types';
 import Pagination from '../../ui/Pagination';
 
 function BookingTable() {
-  const { bookings, isLoading } = useBookings();
+  const { bookings, isLoading, count } = useBookings();
 
   if (isLoading) return <Spinner />;
 
@@ -27,13 +27,13 @@ function BookingTable() {
         </Table.Header>
 
         <Table.Body
-          data={bookings}
+          data={bookings as BookingType[]}
           render={(booking) => (
             <BookingRow key={booking.id} booking={booking as BookingType} />
           )}
         />
         <Table.Footer>
-          <Pagination count={3} />
+          <Pagination count={Number(count)} />
         </Table.Footer>
       </Table>
     </Menus>
