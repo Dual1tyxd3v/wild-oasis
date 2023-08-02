@@ -12,7 +12,7 @@ export function useLogin() {
   const { isLoading, mutate: auth } = useMutation({
     mutationFn: ({ email, password }: LoginType) => login({ email, password }),
     onSuccess: (user) => {
-      queryClient.setQueriesData(['user'], user);
+      queryClient.setQueryData(['user'], user.user);
       navigate(`/${APP_ROUTES.DASHBOARD}`, { replace: true });
     },
     onError: (err) => {
