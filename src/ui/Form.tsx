@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 import { FormTypeProp } from '../types';
 
 type FormProps = {
-  type :FormTypeProp;
+  type: FormTypeProp;
 }
 
 const Form = styled.form<FormProps>`

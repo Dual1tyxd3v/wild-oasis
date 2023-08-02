@@ -78,3 +78,8 @@ export type SortOption = {
   value: string;
   label: string;
 };
+
+export type LoginType = {
+  email: string;
+  password: string;
+};
