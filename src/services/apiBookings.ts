@@ -4,24 +4,38 @@ import { getToday } from '../utils/helpers';
 import supabase from './supabase';
 
 type GetBookingsProps = {
-  filter: string | null;
-  sortBy: string | null;
+  filter: string;
   page: number | null;
+  filterValue: string | null;
+  sortValue: string | null;
 };
 
-export async function getBookings({ filter, sortBy, page }: GetBookingsProps) {
+export async function getBookings({
+  filter,
+  filterValue,
+  sortValue,
+  page,
+}: GetBookingsProps) {
   let query = supabase
     .from('bookings')
     .select('*, cabins(name), guests(fullName, email)', { count: 'exact' });
 
-  if (filter && sortBy) {
-    query = query.eq(filter, sortBy);
+  if (filterValue) {
+    query = query.eq(filter, filterValue);
+  }
+
+  if (sortValue) {
+    const [field, direction] = sortValue.split('-');
+
+    query = query.order(field, {
+      ascending: direction === 'asc',
+    });
   }
 
   if (page) {
     const from = (page - 1) * PAGINATION_COUNT;
     const to = from + PAGINATION_COUNT - 1;
-    
+
     query = query.range(from, to);
   }
 
@@ -100,7 +114,12 @@ export async function getStaysTodayActivity() {
   return data;
 }
 
-export async function updateBooking(id: number, obj) {
+type UpdateBookingObject = {
+  status: string;
+  is_paid: boolean;
+}
+
+export async function updateBooking(id: number, obj: UpdateBookingObject) {
   const { data, error } = await supabase
     .from('bookings')
     .update(obj)
@@ -112,7 +131,7 @@ export async function updateBooking(id: number, obj) {
     console.error(error);
     throw new Error('Booking could not be updated');
   }
-  return data;
+  return data as BookingType;
 }
 
 export async function deleteBooking(id: number) {

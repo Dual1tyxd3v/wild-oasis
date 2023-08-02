@@ -32,7 +32,7 @@ function Select({ options, value, type, onChange }: SelectProps) {
     <StyledSelect defaultValue={value} type={type} onChange={onChange}>
       {options.map((option) => (
         <option key={`sort_${option.label}`} value={option.value}>
-          {`Sort by ${option.label}`}
+          {option.label}
         </option>
       ))}
     </StyledSelect>

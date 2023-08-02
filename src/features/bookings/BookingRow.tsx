@@ -8,7 +8,7 @@ import { formatCurrency } from '../../utils/helpers';
 import { formatDistanceFromNow } from '../../utils/helpers';
 import { BookingType } from '../../types';
 import Menus from '../../ui/Menus';
-import { HiEye } from 'react-icons/hi2';
+import { HiArrowDownOnSquare, HiEye } from 'react-icons/hi2';
 import { useNavigate } from 'react-router-dom';
 import { APP_ROUTES } from '../../const';
 
@@ -96,9 +96,21 @@ function BookingRow({
       <Menus.Menu>
         <Menus.Toggle id={bookingId} />
         <Menus.List id={bookingId}>
-          <Menus.Button onClick={() => navigate(`${bookingId}`)} icon={<HiEye />}>
+          <Menus.Button
+            onClick={() => navigate(`${bookingId}`)}
+            icon={<HiEye />}
+          >
             See details
           </Menus.Button>
+
+          {status === 'unconfirmed' && (
+            <Menus.Button
+              onClick={() => navigate(`/${APP_ROUTES.CHECK_IN}/${bookingId}`)}
+              icon={<HiArrowDownOnSquare />}
+            >
+              Check in
+            </Menus.Button>
+          )}
         </Menus.List>
       </Menus.Menu>
     </Table.Row>

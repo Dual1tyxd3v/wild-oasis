@@ -7,6 +7,7 @@ export enum APP_ROUTES {
   SETTINGS = 'settings',
   ACCOUNT = 'account',
   LOGIN = 'login',
+  CHECK_IN = 'checkin'
 }
 
 export const CABINS_FILTERS = ['All', 'With discount', 'No discount'];

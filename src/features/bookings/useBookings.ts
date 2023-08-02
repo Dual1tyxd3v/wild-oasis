@@ -10,12 +10,19 @@ export function useBookings() {
   const filterValue = params.get('status');
   const filter = !filterValue || filterValue === 'all' ? null : filterValue;
 
+  const sortValue = params.get('sort') || null;
+
   const currentPage = !params.get('page') ? 1 : Number(params.get('page'));
 
   const { data, isLoading, error } = useQuery({
     queryFn: () =>
-      getBookings({ filter: 'status', sortBy: filter, page: currentPage }),
-    queryKey: ['bookings', filter, currentPage],
+      getBookings({
+        filter: 'status',
+        filterValue: filter,
+        sortValue,
+        page: currentPage,
+      }),
+    queryKey: ['bookings', filter, currentPage, sortValue],
   });
   const { data: bookings, count } = data ? data : { data: [], count: 0 };
 
@@ -24,10 +31,11 @@ export function useBookings() {
       queryFn: () =>
         getBookings({
           filter: 'status',
-          sortBy: filter,
+          filterValue: filter,
+          sortValue,
           page: currentPage + 1,
         }),
-      queryKey: ['bookings', filter, currentPage + 1],
+      queryKey: ['bookings', filter, currentPage + 1, sortValue],
     });
 
   if (currentPage > 1)
@@ -35,10 +43,11 @@ export function useBookings() {
       queryFn: () =>
         getBookings({
           filter: 'status',
-          sortBy: filter,
+          filterValue: filter,
+          sortValue,
           page: currentPage - 1,
         }),
-      queryKey: ['bookings', filter, currentPage - 1],
+      queryKey: ['bookings', filter, currentPage - 1, sortValue],
     });
 
   return { bookings, count, isLoading, error };
