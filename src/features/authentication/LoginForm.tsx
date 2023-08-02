@@ -16,7 +16,15 @@ function LoginForm() {
 
     if (!email || !password) return;
 
-    auth({ email, password });
+    auth(
+      { email, password },
+      {
+        onError: () => {
+          setEmail('');
+          setPassword('');
+        },
+      }
+    );
   }
 
   return (
