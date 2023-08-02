@@ -23,7 +23,9 @@ const Label = styled.span`
 
 type DataItemProps = {
   children: ReactNode;
-}
+  icon: ReactNode;
+  label: string;
+};
 
 function DataItem({ icon, label, children }: DataItemProps) {
   return (
