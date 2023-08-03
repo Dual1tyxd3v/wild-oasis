@@ -13,7 +13,5 @@ export function useBooking() {
     retry: false
   });
 
-  if (error) throw new Error('Could not load current booking');
-
   return { booking: data as BookingType, isLoading, error };
 }

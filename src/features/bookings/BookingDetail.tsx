@@ -14,6 +14,7 @@ import { APP_ROUTES } from '../../const';
 import Modal from '../../ui/Modal';
 import ConfirmDelete from '../../ui/ConfirmDelete';
 import { useDeleteBooking } from './useDeleteBooking';
+import Empty from '../../ui/Empty';
 
 const HeadingGroup = styled.div`
   display: flex;
@@ -28,6 +29,8 @@ function BookingDetail() {
   const navigate = useNavigate();
 
   if (isLoading) return <Spinner />;
+
+  if (!booking) return <Empty resource="booking" />;
 
   const { status, id } = booking;
 
@@ -59,9 +62,7 @@ function BookingDetail() {
 
       <ButtonGroup>
         {status === 'unconfirmed' && (
-          <Button onClick={() => navigate(`/${APP_ROUTES.CHECK_IN}/${id}`)}>
-            Check in
-          </Button>
+          <Button onClick={() => navigate(`/${APP_ROUTES.CHECK_IN}/${id}`)}>Check in</Button>
         )}
         <Modal>
           <Modal.Open opens="delete">

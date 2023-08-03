@@ -13,7 +13,10 @@ type DarkModeProviderProps = {
 const DarkModeContext = createContext<null | DarkModeContextInintState>(null);
 
 function DarkModeProvider({ children }: DarkModeProviderProps) {
-  const [isDarkMode, setIsDarkMode] = useLocalStorageState(false, 'isDarkMode');
+  const [isDarkMode, setIsDarkMode] = useLocalStorageState(
+    window.matchMedia('(prefers-color-schema: dark)').matches,
+    'isDarkMode'
+  );
 
   useEffect(() => {
     if (isDarkMode) {
@@ -27,7 +30,11 @@ function DarkModeProvider({ children }: DarkModeProviderProps) {
     setIsDarkMode((i: boolean) => !i);
   }
 
-  return <DarkModeContext.Provider value={{ isDarkMode, toggleDarkMode }}>{children}</DarkModeContext.Provider>;
+  return (
+    <DarkModeContext.Provider value={{ isDarkMode, toggleDarkMode }}>
+      {children}
+    </DarkModeContext.Provider>
+  );
 }
 
 export function useDarkMode() {

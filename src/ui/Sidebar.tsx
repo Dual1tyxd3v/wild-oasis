@@ -1,7 +1,6 @@
 import { styled } from 'styled-components';
 import Logo from './Logo';
 import MainNav from './MainNav';
-import Uploader from '../data/Uploader';
 
 const Aside = styled.aside`
   padding: 3.2rem 2.4rem;
@@ -18,7 +17,8 @@ function Sidebar() {
     <Aside>
       <Logo />
       <MainNav />
-      <Uploader />
+      {/* Component for uploading new fake data */}
+      {/* <Uploader /> */}
     </Aside>
   );
 }
