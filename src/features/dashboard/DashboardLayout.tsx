@@ -6,6 +6,7 @@ import Stats from './Stats';
 import { BookingType, CabinType } from '../../types';
 import useCabins from '../cabins/useCabins';
 import SalesChart from './SalesChart';
+import DurationChart from './DurationChart';
 
 const StyledDashboardLayout = styled.div`
   display: grid;
@@ -30,7 +31,7 @@ function DashboardLayout() {
         confirmedStays={confirmedStays}
       />
       <div>Today's activity</div>
-      <div>Chart stay duration</div>
+      <DurationChart confirmedStays={confirmedStays} />
       <SalesChart bookings={data as BookingType[]} numDays={numDays} />
     </StyledDashboardLayout>
   );

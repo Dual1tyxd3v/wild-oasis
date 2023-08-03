@@ -24,11 +24,13 @@ type SalesChartProps = {
 function SalesChart({ bookings, numDays }: SalesChartProps) {
   const { isDarkMode } = useDarkMode();
 
+  // Derive all dates in a range
   const allDays = eachDayOfInterval({
     start: subDays(new Date(), numDays - 1),
     end: new Date(),
   });
 
+  // Prepare data for a chart
   const data = allDays.map((date) => {
     return {
       label: format(date, 'MMM dd'),
@@ -56,7 +58,9 @@ function SalesChart({ bookings, numDays }: SalesChartProps) {
       };
   return (
     <StyledSalesChart>
-      <Heading as="h2">Sales</Heading>
+      <Heading as="h2">
+        Sales from {format(allDays[0], 'MMM dd yyyy')} to &mdash; {format(allDays[allDays.length - 1], 'MMM dd yyyy')}
+      </Heading>
       <ResponsiveContainer height={300} width="100%">
         <AreaChart data={data}>
           <XAxis dataKey="label" tick={{ fill: colors.text }} tickLine={{ stroke: colors.text }} />
