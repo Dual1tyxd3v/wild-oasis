@@ -16,6 +16,7 @@ import { Toaster } from 'react-hot-toast';
 import Booking from './pages/Booking';
 import Checkin from './pages/Checkin';
 import ProtectedRoute from './ui/ProtectedRoute';
+import DarkModeProvider from './context/DarkModeContext';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -27,52 +28,51 @@ const queryClient = new QueryClient({
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools initialIsOpen={false} />
-      <GlobalStyles />
-      <BrowserRouter>
-        <Routes>
-          <Route
-            element={
-              <ProtectedRoute>
-                <AppLayout />
-              </ProtectedRoute>
-            }
-          >
+    <DarkModeProvider>
+      <QueryClientProvider client={queryClient}>
+        <ReactQueryDevtools initialIsOpen={false} />
+        <GlobalStyles />
+        <BrowserRouter>
+          <Routes>
             <Route
-              index
-              element={<Navigate to={APP_ROUTES.DASHBOARD} replace />}
-            />
-            <Route path={APP_ROUTES.DASHBOARD} element={<Dashboard />} />
-            <Route path={APP_ROUTES.BOOKINGS} element={<Bookings />} />
-            <Route path={`${APP_ROUTES.BOOKINGS}/:id`} element={<Booking />} />
-            <Route path={`${APP_ROUTES.CHECK_IN}/:id`} element={<Checkin />} />
-            <Route path={APP_ROUTES.CABINS} element={<Cabins />} />
-            <Route path={APP_ROUTES.USERS} element={<Users />} />
-            <Route path={APP_ROUTES.SETTINGS} element={<Settings />} />
-            <Route path={APP_ROUTES.ACCOUNT} element={<Account />} />
-          </Route>
-          <Route path={APP_ROUTES.LOGIN} element={<Login />} />
-          <Route path="*" element={<PageNotFound />} />
-        </Routes>
-      </BrowserRouter>
-      <Toaster
-        position="top-center"
-        gutter={12}
-        containerStyle={{ margin: '8px' }}
-        toastOptions={{
-          success: { duration: 3000 },
-          error: { duration: 5000 },
-          style: {
-            fontSize: '16px',
-            maxWidth: '500px',
-            padding: '16px 24px',
-            backgroundColor: 'var(--color-grey-0)',
-            color: 'var(--color-grey-700)',
-          },
-        }}
-      />
-    </QueryClientProvider>
+              element={
+                <ProtectedRoute>
+                  <AppLayout />
+                </ProtectedRoute>
+              }
+            >
+              <Route index element={<Navigate to={APP_ROUTES.DASHBOARD} replace />} />
+              <Route path={APP_ROUTES.DASHBOARD} element={<Dashboard />} />
+              <Route path={APP_ROUTES.BOOKINGS} element={<Bookings />} />
+              <Route path={`${APP_ROUTES.BOOKINGS}/:id`} element={<Booking />} />
+              <Route path={`${APP_ROUTES.CHECK_IN}/:id`} element={<Checkin />} />
+              <Route path={APP_ROUTES.CABINS} element={<Cabins />} />
+              <Route path={APP_ROUTES.USERS} element={<Users />} />
+              <Route path={APP_ROUTES.SETTINGS} element={<Settings />} />
+              <Route path={APP_ROUTES.ACCOUNT} element={<Account />} />
+            </Route>
+            <Route path={APP_ROUTES.LOGIN} element={<Login />} />
+            <Route path="*" element={<PageNotFound />} />
+          </Routes>
+        </BrowserRouter>
+        <Toaster
+          position="top-center"
+          gutter={12}
+          containerStyle={{ margin: '8px' }}
+          toastOptions={{
+            success: { duration: 3000 },
+            error: { duration: 5000 },
+            style: {
+              fontSize: '16px',
+              maxWidth: '500px',
+              padding: '16px 24px',
+              backgroundColor: 'var(--color-grey-0)',
+              color: 'var(--color-grey-700)',
+            },
+          }}
+        />
+      </QueryClientProvider>
+    </DarkModeProvider>
   );
 }
 
