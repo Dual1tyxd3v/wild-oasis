@@ -1,5 +1,6 @@
 import { useSearchParams } from 'react-router-dom';
 import styled, { css } from 'styled-components';
+import { OptionsType } from '../types';
 
 const StyledFilter = styled.div`
   border: 1px solid var(--color-grey-100);
@@ -41,7 +42,7 @@ const FilterButton = styled.button<FilterButtonProps>`
 
 type FilterProps = {
   filterField: string;
-  options: string[];
+  options: OptionsType[];
 };
 
 function Filter({ filterField, options }: FilterProps) {
@@ -58,16 +59,12 @@ function Filter({ filterField, options }: FilterProps) {
     <StyledFilter>
       {options.map((option) => (
         <FilterButton
-          key={option}
-          active={
-            filterValue === option.toLowerCase().replace(/ /g, '-') ? 'true' : ''
-          }
-          disabled={
-            filterValue === option.toLowerCase().replace(/ /g, '-')
-          }
-          onClick={() => handleClick(option.toLowerCase().replace(/ /g, '-'))}
+          key={option.label}
+          active={filterValue === option.value.toString() ? 'true' : ''}
+          disabled={filterValue === option.value.toString()}
+          onClick={() => handleClick(option.value.toString())}
         >
-          {option}
+          {option.label}
         </FilterButton>
       ))}
     </StyledFilter>

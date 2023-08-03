@@ -83,3 +83,8 @@ export type LoginType = {
   email: string;
   password: string;
 };
+
+export type OptionsType = {
+  value: string;
+  label: string;
+}
