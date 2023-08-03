@@ -1,5 +1,5 @@
 import { LoginType } from '../types';
-import supabase from './supabase';
+import supabase, { supabaseUrl } from './supabase';
 
 type SignupProps = {
   fullName: string;
@@ -50,4 +50,38 @@ export async function logout() {
   const { error } = await supabase.auth.signOut();
 
   if (error) throw new Error(error.message);
+}
+
+type UpdateCurrentUserProps = {
+  password?: string;
+  fullName?: string;
+  avatar?: File | null;
+};
+
+export async function updateCurrentUser({ password, fullName, avatar }: UpdateCurrentUserProps) {
+  let updateData = {};
+
+  if (password) updateData = { password };
+  if (fullName) updateData = { data: { fullName } };
+  const { data, error } = await supabase.auth.updateUser(updateData);
+
+  if (error) throw new Error(error.message);
+
+  if (!avatar) return data;
+
+  const fileName = `avatar-${data.user.id}-${new Date().getTime()}`;
+
+  const { error: errorUpload } = await supabase.storage.from('avatars').upload(fileName, avatar);
+
+  if (errorUpload) throw new Error(errorUpload.message);
+
+  const { data: updatedUser, error: updatedError } = await supabase.auth.updateUser({
+    data: {
+      avatar: `${supabaseUrl}/storage/v1/object/public/avatars/${fileName}`,
+    },
+  });
+
+  if (updatedError) throw new Error(updatedError.message);
+
+  return updatedUser;
 }

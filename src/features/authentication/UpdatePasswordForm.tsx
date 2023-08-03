@@ -1,4 +1,4 @@
-import { useForm } from 'react-hook-form';
+import { FieldValues, useForm } from 'react-hook-form';
 import Button from '../../ui/Button';
 import Form from '../../ui/Form';
 import FormRow from '../../ui/FormRow';
@@ -12,16 +12,13 @@ function UpdatePasswordForm() {
 
   const { updateUser, isUpdating } = useUpdateUser();
 
-  function onSubmit({ password }) {
-    updateUser({ password }, { onSuccess: reset });
+  function onSubmit({ password }: FieldValues) {
+    updateUser({ password }, { onSuccess: () => reset() });
   }
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
-      <FormRow
-        label="Password (min 8 characters)"
-        error={errors?.password?.message}
-      >
+    <Form type="regular" onSubmit={handleSubmit(onSubmit)}>
+      <FormRow labelName="Password (min 8 characters)" errorMessage={errors?.password?.message as string}>
         <Input
           type="password"
           id="password"
@@ -37,10 +34,7 @@ function UpdatePasswordForm() {
         />
       </FormRow>
 
-      <FormRow
-        label="Confirm password"
-        error={errors?.passwordConfirm?.message}
-      >
+      <FormRow labelName="Confirm password" errorMessage={errors?.passwordConfirm?.message as string}>
         <Input
           type="password"
           autoComplete="new-password"
@@ -48,16 +42,17 @@ function UpdatePasswordForm() {
           disabled={isUpdating}
           {...register('passwordConfirm', {
             required: 'This field is required',
-            validate: (value) =>
-              getValues().password === value || 'Passwords need to match',
+            validate: (value) => getValues().password === value || 'Passwords need to match',
           })}
         />
       </FormRow>
       <FormRow>
-        <Button onClick={reset} type="reset" variation="secondary">
-          Cancel
-        </Button>
-        <Button disabled={isUpdating}>Update password</Button>
+        <>
+          <Button onClick={reset} type="reset" variation="secondary">
+            Cancel
+          </Button>
+          <Button disabled={isUpdating}>Update password</Button>
+        </>
       </FormRow>
     </Form>
   );
