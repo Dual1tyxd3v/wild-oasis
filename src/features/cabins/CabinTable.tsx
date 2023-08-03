@@ -14,7 +14,7 @@ export default function CabinTable() {
 
   if (isLoading) return <Spinner />;
 
-  if (!data) return <Empty resource="Cabins"></Empty>;
+  if (!data || !data.length) return <Empty resource="Cabins"></Empty>;
 
   // FILTER
   const filter = params.get('discount');
@@ -51,7 +51,7 @@ export default function CabinTable() {
         <Table.Body
           data={filteredCabins}
           render={(cabin) => (
-            <CabinRow cabin={cabin} key={`cabins_${cabin.id}`} />
+            <CabinRow cabin={cabin as CabinType} key={`cabins_${cabin.id}`} />
           )}
         />
       </Table>
