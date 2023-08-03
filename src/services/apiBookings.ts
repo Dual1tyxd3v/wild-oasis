@@ -97,9 +97,9 @@ export async function getStaysAfterDate(date: string) {
 export async function getStaysTodayActivity() {
   const { data, error } = await supabase
     .from('bookings')
-    .select('*, guests(fullName, nationality, countryFlag)')
+    .select('*, guests(fullName, nationality, country_flag)')
     .or(
-      `and(status.eq.unconfirmed,startDate.eq.${getToday()}),and(status.eq.checked-in,endDate.eq.${getToday()})`
+      `and(status.eq.unconfirmed,start_date.eq.${getToday()}),and(status.eq.checked-in,end_date.eq.${getToday()})`
     )
     .order('created_at');
 
@@ -116,7 +116,7 @@ export async function getStaysTodayActivity() {
 
 type UpdateBookingObject = {
   status: string;
-  is_paid: boolean;
+  is_paid?: boolean;
 }
 
 export async function updateBooking(id: number, obj: UpdateBookingObject) {
